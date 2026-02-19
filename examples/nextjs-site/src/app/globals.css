@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.notion-content {
+  @apply prose prose-lg max-w-none;
+}
+
+.notion-content h1 {
+  @apply text-4xl font-bold mt-8 mb-4;
+}
+
+.notion-content h2 {
+  @apply text-3xl font-semibold mt-6 mb-3;
+}
+
+.notion-content h3 {
+  @apply text-2xl font-medium mt-4 mb-2;
+}
+
+.notion-content p {
+  @apply my-4 leading-relaxed;
+}
+
+.notion-content ul,
+.notion-content ol {
+  @apply my-4 pl-6;
+}
+
+.notion-content li {
+  @apply my-2;
+}
+
+.notion-content blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic my-4;
+}
+
+.notion-content pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+}
+
+.notion-content code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
+}
+
+.notion-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.notion-content .callout {
+  @apply bg-gray-100 p-4 rounded-lg my-4 flex gap-3;
+}
+
+.notion-content .todo {
+  @apply flex items-center gap-2 my-2;
+}
+
+.notion-content figure {
+  @apply my-6;
+}
+
+.notion-content figure img {
+  @apply rounded-lg w-full;
+}
+
+.notion-content figcaption {
+  @apply text-center text-sm text-gray-500 mt-2;
+}
+
+.notion-content hr {
+  @apply my-8 border-gray-200;
+}
+
+.notion-content a {
+  @apply text-blue-600 hover:underline;
+}
+
+.notion-content table {
+  @apply w-full border-collapse my-4;
+}
+
+.notion-content th,
+.notion-content td {
+  @apply border border-gray-200 px-4 py-2 text-left;
+}
+
+.notion-content th {
+  @apply bg-gray-50 font-semibold;
+}
+
+.video-embed {
+  @apply aspect-video w-full rounded-lg overflow-hidden my-6;
+}
+
+.video-embed iframe {
+  @apply w-full h-full;
+}
