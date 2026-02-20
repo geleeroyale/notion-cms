@@ -14,49 +14,49 @@ class BlockTransformer {
             : "";
         switch (block.type) {
             case "paragraph":
-                return `<p>${this.escapeHTML(block.content)}</p>`;
+                return `<p>${block.content}</p>`;
             case "heading_1":
-                return `<h1>${this.escapeHTML(block.content)}</h1>`;
+                return `<h1>${block.content}</h1>`;
             case "heading_2":
-                return `<h2>${this.escapeHTML(block.content)}</h2>`;
+                return `<h2>${block.content}</h2>`;
             case "heading_3":
-                return `<h3>${this.escapeHTML(block.content)}</h3>`;
+                return `<h3>${block.content}</h3>`;
             case "bulleted_list_item":
-                return `<li>${this.escapeHTML(block.content)}${childrenHTML ? `<ul>${childrenHTML}</ul>` : ""}</li>`;
+                return `<li>${block.content}${childrenHTML ? `<ul>${childrenHTML}</ul>` : ""}</li>`;
             case "numbered_list_item":
-                return `<li>${this.escapeHTML(block.content)}${childrenHTML ? `<ol>${childrenHTML}</ol>` : ""}</li>`;
+                return `<li>${block.content}${childrenHTML ? `<ol>${childrenHTML}</ol>` : ""}</li>`;
             case "to_do":
                 const checked = block.metadata?.checked ? "checked" : "";
-                return `<div class="todo"><input type="checkbox" ${checked} disabled />${this.escapeHTML(block.content)}</div>`;
+                return `<div class="todo"><input type="checkbox" ${checked} disabled />${block.content}</div>`;
             case "toggle":
-                return `<details><summary>${this.escapeHTML(block.content)}</summary>${childrenHTML}</details>`;
+                return `<details><summary>${block.content}</summary>${childrenHTML}</details>`;
             case "code":
                 const lang = block.metadata?.language || "";
                 return `<pre><code class="language-${lang}">${this.escapeHTML(block.content)}</code></pre>`;
             case "quote":
-                return `<blockquote>${this.escapeHTML(block.content)}</blockquote>`;
+                return `<blockquote>${block.content}</blockquote>`;
             case "callout":
                 const icon = block.metadata?.icon || "";
-                return `<div class="callout">${icon} ${this.escapeHTML(block.content)}</div>`;
+                return `<div class="callout">${icon} ${block.content}</div>`;
             case "divider":
                 return `<hr />`;
             case "image":
                 const url = block.metadata?.url || "";
                 const caption = block.content || "";
-                return `<figure><img src="${url}" alt="${this.escapeHTML(caption)}" />${caption ? `<figcaption>${this.escapeHTML(caption)}</figcaption>` : ""}</figure>`;
+                return `<figure><img src="${url}" alt="${this.escapeHTML(caption)}" />${caption ? `<figcaption>${caption}</figcaption>` : ""}</figure>`;
             case "video":
                 return `<video src="${block.metadata?.url || ""}" controls></video>`;
             case "embed":
                 return `<iframe src="${block.metadata?.url || ""}" frameborder="0"></iframe>`;
             case "bookmark":
-                return `<a href="${block.metadata?.url || ""}" class="bookmark">${this.escapeHTML(block.content || block.metadata?.url || "")}</a>`;
+                return `<a href="${block.metadata?.url || ""}" class="bookmark">${block.content || block.metadata?.url || ""}</a>`;
             case "table":
                 return `<table>${childrenHTML}</table>`;
             case "table_row":
                 const cells = block.metadata?.cells || [];
                 return `<tr>${cells.map((c) => `<td>${this.escapeHTML(c)}</td>`).join("")}</tr>`;
             default:
-                return `<div class="block-${block.type}">${this.escapeHTML(block.content)}</div>`;
+                return `<div class="block-${block.type}">${block.content}</div>`;
         }
     }
     blockToMarkdown(block) {

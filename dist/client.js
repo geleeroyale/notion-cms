@@ -139,14 +139,43 @@ class NotionCMS {
     extractRichText(richText) {
         if (!Array.isArray(richText))
             return "";
+        return richText.map((t) => {
+            let text = t.plain_text || "";
+            if (!t.annotations && !t.href)
+                return this.escapeText(text);
+            text = this.escapeText(text);
+            if (t.annotations?.code)
+                text = `<code>${text}</code>`;
+            if (t.annotations?.bold)
+                text = `<strong>${text}</strong>`;
+            if (t.annotations?.italic)
+                text = `<em>${text}</em>`;
+            if (t.annotations?.strikethrough)
+                text = `<s>${text}</s>`;
+            if (t.annotations?.underline)
+                text = `<u>${text}</u>`;
+            if (t.href)
+                text = `<a href="${t.href}">${text}</a>`;
+            return text;
+        }).join("");
+    }
+    extractPlainText(richText) {
+        if (!Array.isArray(richText))
+            return "";
         return richText.map((t) => t.plain_text || "").join("");
+    }
+    escapeText(str) {
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
     }
     extractTitle(page) {
         const props = page.properties || {};
         for (const key of Object.keys(props)) {
             const prop = props[key];
             if (prop.type === "title" && prop.title) {
-                return this.extractRichText(prop.title);
+                return this.extractPlainText(prop.title);
             }
         }
         return "";
@@ -154,7 +183,7 @@ class NotionCMS {
     extractSlug(page) {
         const props = page.properties || {};
         if (props.Slug?.rich_text) {
-            return this.extractRichText(props.Slug.rich_text);
+            return this.extractPlainText(props.Slug.rich_text);
         }
         const title = this.extractTitle(page);
         return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -170,9 +199,9 @@ class NotionCMS {
     extractPropertyValue(prop) {
         switch (prop.type) {
             case "title":
-                return this.extractRichText(prop.title);
+                return this.extractPlainText(prop.title);
             case "rich_text":
-                return this.extractRichText(prop.rich_text);
+                return this.extractPlainText(prop.rich_text);
             case "number":
                 return prop.number;
             case "select":
@@ -228,7 +257,7 @@ class NotionCMS {
         if (data.external?.url)
             metadata.url = data.external.url;
         if (data.cells)
-            metadata.cells = data.cells.map((c) => this.extractRichText(c));
+            metadata.cells = data.cells.map((c) => this.extractPlainText(c));
         return metadata;
     }
     clearCache() {

@@ -13,6 +13,8 @@ export declare class NotionCMS {
     private parseBlocks;
     private parseBlock;
     private extractRichText;
+    private extractPlainText;
+    private escapeText;
     private extractTitle;
     private extractSlug;
     private extractProperties;

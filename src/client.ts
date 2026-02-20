@@ -181,29 +181,52 @@ export class NotionCMS {
 
   private extractRichText(richText: any[]): string {
     if (!Array.isArray(richText)) return "";
+    return richText.map((t: any) => {
+      let text = t.plain_text || "";
+      if (!t.annotations && !t.href) return this.escapeText(text);
+      text = this.escapeText(text);
+      if (t.annotations?.code) text = `<code>${text}</code>`;
+      if (t.annotations?.bold) text = `<strong>${text}</strong>`;
+      if (t.annotations?.italic) text = `<em>${text}</em>`;
+      if (t.annotations?.strikethrough) text = `<s>${text}</s>`;
+      if (t.annotations?.underline) text = `<u>${text}</u>`;
+      if (t.href) text = `<a href="${t.href}">${text}</a>`;
+      return text;
+    }).join("");
+  }
+
+  private extractPlainText(richText: any[]): string {
+    if (!Array.isArray(richText)) return "";
     return richText.map((t: any) => t.plain_text || "").join("");
+  }
+
+  private escapeText(str: string): string {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
   }
 
   private extractTitle(page: any): string {
     const props = page.properties || {};
-    
+
     for (const key of Object.keys(props)) {
       const prop = props[key];
       if (prop.type === "title" && prop.title) {
-        return this.extractRichText(prop.title);
+        return this.extractPlainText(prop.title);
       }
     }
-    
+
     return "";
   }
 
   private extractSlug(page: any): string {
     const props = page.properties || {};
-    
+
     if (props.Slug?.rich_text) {
-      return this.extractRichText(props.Slug.rich_text);
+      return this.extractPlainText(props.Slug.rich_text);
     }
-    
+
     const title = this.extractTitle(page);
     return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
@@ -222,9 +245,9 @@ export class NotionCMS {
   private extractPropertyValue(prop: any): any {
     switch (prop.type) {
       case "title":
-        return this.extractRichText(prop.title);
+        return this.extractPlainText(prop.title);
       case "rich_text":
-        return this.extractRichText(prop.rich_text);
+        return this.extractPlainText(prop.rich_text);
       case "number":
         return prop.number;
       case "select":
@@ -275,7 +298,7 @@ export class NotionCMS {
     if (data.url) metadata.url = data.url;
     if (data.file?.url) metadata.url = data.file.url;
     if (data.external?.url) metadata.url = data.external.url;
-    if (data.cells) metadata.cells = data.cells.map((c: any[]) => this.extractRichText(c));
+    if (data.cells) metadata.cells = data.cells.map((c: any[]) => this.extractPlainText(c));
 
     return metadata;
   }
