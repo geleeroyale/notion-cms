@@ -5,3 +5,4 @@ dist/
 examples/nextjs-site/node_modules/
 examples/nextjs-site/.next/
 examples/nextjs-site/.env.local
+.DS_Store
