@@ -131,7 +131,7 @@ class NotionCMS {
         return {
             id: block.id,
             type,
-            content: this.extractRichText(blockData.rich_text || blockData.text || []),
+            content: this.extractRichText(blockData.rich_text || blockData.caption || blockData.text || []),
             children,
             metadata: this.extractBlockMetadata(block),
         };

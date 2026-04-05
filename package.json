@@ -1,6 +1,6 @@
 {
   "name": "@geleeroyale/notion-cms",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A minimal framework to use Notion as CMS for any website",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "url": "https://github.com/geleeroyale/notion-cms.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15"

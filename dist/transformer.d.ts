@@ -4,5 +4,6 @@ export declare class BlockTransformer {
     toMarkdown(blocks: ContentBlock[]): string;
     private blockToHTML;
     private blockToMarkdown;
+    private extractYouTubeId;
     private escapeHTML;
 }

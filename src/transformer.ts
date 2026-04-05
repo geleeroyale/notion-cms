@@ -61,7 +61,12 @@ export class BlockTransformer {
         return `<figure><img src="${url}" alt="${this.escapeHTML(caption)}" />${caption ? `<figcaption>${caption}</figcaption>` : ""}</figure>`;
 
       case "video":
-        return `<video src="${block.metadata?.url || ""}" controls></video>`;
+        const videoUrl = block.metadata?.url || "";
+        const ytId = this.extractYouTubeId(videoUrl);
+        if (ytId) {
+          return `<div class="video-embed"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
+        }
+        return `<video src="${videoUrl}" controls></video>`;
 
       case "embed":
         return `<iframe src="${block.metadata?.url || ""}" frameborder="0"></iframe>`;
@@ -149,6 +154,11 @@ export class BlockTransformer {
       default:
         return block.content;
     }
+  }
+
+  private extractYouTubeId(url: string): string | null {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
   }
 
   private escapeHTML(str: string): string {
